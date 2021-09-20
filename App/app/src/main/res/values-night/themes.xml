@@ -1,0 +1,21 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.Steps" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/blueGrey</item>
+        <item name="colorPrimaryVariant">@color/blueGreyLight</item>
+        <item name="colorPrimaryDark">@color/blueGreyDark</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="android:colorBackground">@color/backgroundDarkTheme</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+
+        <item name="android:navigationBarColor">@color/blueGreyDark</item>
+
+
+        <item name="colorSecondary">@color/blueGrey</item>
+        <item name="colorSecondaryVariant">@color/blueGreyLight</item>
+        <item name="colorAccent">@color/blueGreyDark</item>
+    </style>
+</resources>

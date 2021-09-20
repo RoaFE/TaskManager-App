@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Steps</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_goals">Goals</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="title_history">History</string>
+    <string name="title_add_edit_goal">Goal Editor</string>
+    <string name="cur_goal_string">Goal</string>
+    <string name="steps_string"> steps</string>
+</resources>

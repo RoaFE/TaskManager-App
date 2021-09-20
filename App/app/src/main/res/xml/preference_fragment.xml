@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="Goals Editing">
+    <SwitchPreferenceCompat
+        android:key="goal_edit_switch"
+        android:title="Lock Goals"
+        android:summary="Lock goals to disable editing. Goals can still be deleted"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>
