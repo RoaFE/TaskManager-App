@@ -3,11 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory
-        android:title="Goals Editing">
+        android:title="Tasks Editing">
     <SwitchPreferenceCompat
-        android:key="goal_edit_switch"
-        android:title="Lock Goals"
-        android:summary="Lock goals to disable editing. Goals can still be deleted"/>
+        android:key="task_edit_switch"
+        android:title="Lock tasks"
+        android:summary="Lock tasks to disable editing. Tasks can still be deleted"/>
     </PreferenceCategory>
 
 </PreferenceScreen>

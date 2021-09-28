@@ -30,10 +30,22 @@ class AddEditTaskViewModel @ViewModelInject constructor(
             state.set("taskName",value)
         }
 
-    var taskDescription = state.get<String>("taskDescription") ?: task?.taskDescription.toString() ?: ""
+    var taskDescription = state.get<String>("taskDescription") ?: task?.taskDescription ?: ""
         set(value) {
             field = value
             state.set("taskDescription",value)
+        }
+
+    var taskFeasibility = state.get<Int>("taskFeasibility") ?: task?.taskDifficulty ?: 0
+        set(value) {
+            field = value
+            state.set("taskFeasibility",value)
+        }
+
+    var taskPriority = state.get<Int>("taskPriority") ?: task?.taskPriority ?: 0
+        set(value) {
+            field = value
+            state.set("taskPriority",value)
         }
 
     var lockTasks : Boolean = false
@@ -53,10 +65,10 @@ class AddEditTaskViewModel @ViewModelInject constructor(
                 showInvalidInputMessage("Tasks are locked and can't be edited")
                 return
             }
-            val updatedTask = task.copy(name = taskName, taskDescription = taskDescription)
+            val updatedTask = task.copy(name = taskName,taskDescription = taskDescription,taskPriority = taskPriority,taskDifficulty = taskFeasibility,taskScore = taskPriority.toFloat() / taskFeasibility.toFloat())
             updateTask(updatedTask)
         } else {
-            val newTask = Task(name = taskName,taskDescription = taskDescription,taskPriority = 1,taskDifficulty = 1,taskCompletion = 0f)
+            val newTask = Task(name = taskName,taskDescription = taskDescription,taskPriority = taskPriority,taskDifficulty = taskFeasibility,taskCompletion = 0f,taskScore = taskPriority.toFloat() / taskFeasibility.toFloat())
             createTask(newTask)
         }
     }

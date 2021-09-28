@@ -30,9 +30,13 @@ class AddEditTaskFragment : Fragment(R.layout.fragment_add_edit_task) {
             editTextTaskName.setText(viewModel.taskName)
             if (viewModel.taskDescription == "null") {
                 editTextDescription.setText("")
+                editTextFeasability.setText("")
+                editTextPriority.setText("")
                 fabDeleteTask.isVisible = false
             } else {
                 editTextDescription.setText((viewModel.taskDescription))
+                editTextFeasability.setText(viewModel.taskFeasibility.toString())
+                editTextPriority.setText(viewModel.taskPriority.toString())
                 fabDeleteTask.isVisible = true
             }
             textViewDateCreated.isVisible = viewModel.task != null
@@ -44,6 +48,27 @@ class AddEditTaskFragment : Fragment(R.layout.fragment_add_edit_task) {
 
             editTextDescription.addTextChangedListener {
                 viewModel.taskDescription = it.toString()
+            }
+
+            editTextFeasability.addTextChangedListener {
+                var input = it.toString()
+                if(input == ""){
+                    viewModel.taskFeasibility = 1
+                }
+                else
+                {
+                    viewModel.taskFeasibility = it.toString().toInt()
+                }
+            }
+            editTextPriority.addTextChangedListener {
+                var input = it.toString()
+                if(input == ""){
+                    viewModel.taskPriority = 1
+                }
+                else
+                {
+                    viewModel.taskPriority = it.toString().toInt()
+                }
             }
 
             fabSavTask.setOnClickListener {

@@ -29,7 +29,7 @@
         android:layout_toRightOf="@id/goal_name" />-->
 
     <TextView
-        android:id="@+id/task_score"
+        android:id="@+id/task_fesability"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/task_name"
@@ -38,18 +38,31 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:textColor="?attr/colorOnPrimary"
-        tools:text="6000" />
+        tools:text="6000"
+        android:layout_marginRight="8dp"/>
+
     <TextView
-        android:id="@+id/task_percentage"
+        android:id="@+id/task_priority"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/task_name"
         android:layout_alignBottom="@id/task_name"
-        android:layout_toRightOf="@id/task_score"
+        android:layout_toRightOf="@id/task_fesability"
         android:ellipsize="end"
         android:maxLines="1"
         android:textColor="?attr/colorOnPrimary"
-        android:text="@string/steps_string"
-        android:paddingLeft="4dp"/>
+        tools:text="6000"
+        android:layout_marginRight="8dp"/>
 
+    <TextView
+        android:id="@+id/task_score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/task_name"
+        android:layout_alignBottom="@id/task_name"
+        android:layout_toRightOf="@id/task_priority"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="?attr/colorOnPrimary"
+        tools:text="6000" />
 </RelativeLayout>
