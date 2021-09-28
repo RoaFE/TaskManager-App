@@ -10,7 +10,7 @@
     android:padding="8dp">
 
     <TextView
-        android:id="@+id/goal_name"
+        android:id="@+id/task_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -29,23 +29,23 @@
         android:layout_toRightOf="@id/goal_name" />-->
 
     <TextView
-        android:id="@+id/goal_target"
+        android:id="@+id/task_score"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/goal_name"
-        android:layout_alignBottom="@id/goal_name"
-        android:layout_toRightOf="@id/goal_name"
+        android:layout_alignTop="@+id/task_name"
+        android:layout_alignBottom="@id/task_name"
+        android:layout_toRightOf="@id/task_name"
         android:ellipsize="end"
         android:maxLines="1"
         android:textColor="?attr/colorOnPrimary"
         tools:text="6000" />
     <TextView
-        android:id="@+id/goal_target_steps_string"
+        android:id="@+id/task_percentage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/goal_name"
-        android:layout_alignBottom="@id/goal_name"
-        android:layout_toRightOf="@id/goal_target"
+        android:layout_alignTop="@+id/task_name"
+        android:layout_alignBottom="@id/task_name"
+        android:layout_toRightOf="@id/task_score"
         android:ellipsize="end"
         android:maxLines="1"
         android:textColor="?attr/colorOnPrimary"

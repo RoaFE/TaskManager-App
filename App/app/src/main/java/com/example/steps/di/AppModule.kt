@@ -2,7 +2,7 @@ package com.example.steps.di
 
 import android.app.Application
 import androidx.room.Room
-import com.example.steps.data.GoalDatabase
+import com.example.steps.data.TaskDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,17 +20,15 @@ object AppModule {
     @Singleton
     fun provideDatabase(
         app: Application,
-        callback: GoalDatabase.Callback
-    ) = Room.databaseBuilder(app, GoalDatabase::class.java, "goal_database")
+        callback: TaskDatabase.Callback
+    ) = Room.databaseBuilder(app, TaskDatabase::class.java, "task_database")
         .fallbackToDestructiveMigration()
         .addCallback(callback)
         .build()
 
     @Provides
-    fun provideGoalDao(db: GoalDatabase) = db.goalDao()
+    fun provideTaskDao(db: TaskDatabase) = db.taskDao()
 
-    @Provides
-    fun provideHistoryDao(db: GoalDatabase) = db.historyDao()
 
     @ApplicationScope
     @Provides

@@ -1,32 +1,23 @@
 package com.example.steps.ui.home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.steps.R
-import com.example.steps.data.Goal
+import com.example.steps.data.Task
 import com.example.steps.data.SortOrder
 import com.example.steps.databinding.FragmentHomeBinding
-import com.example.steps.ui.goals.GoalsAdapter
-import com.example.steps.ui.goals.GoalsFragmentDirections
-import com.example.steps.ui.goals.GoalsViewModel
 import com.example.steps.util.exhaustive
 import com.example.steps.util.onQueryTextChanged
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.coroutines.flow.collect
-import kotlin.math.ceil
-import kotlin.math.floor
 
 @AndroidEntryPoint
 class HomeFragment : Fragment(R.layout.fragment_home), HomeAdapter.OnItemClickListener {
@@ -48,7 +39,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), HomeAdapter.OnItemClickLi
                 setHasFixedSize(true)
             }
 
-            editTextGoalSteps.addTextChangedListener {
+            editTextDescription.addTextChangedListener {
                 viewModel.stepsIncrement = it.toString()
             }
 
@@ -62,34 +53,15 @@ class HomeFragment : Fragment(R.layout.fragment_home), HomeAdapter.OnItemClickLi
 
 
 
-        viewModel.goals.observe(viewLifecycleOwner) {
+        viewModel.tasks.observe(viewLifecycleOwner) {
             homeAdapter.submitList(it)
-            viewModel.onGoalLoad()
+            viewModel.onTaskLoad()
         }
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.homeEvent.collect {event ->
                 when(event)
                 {
-                    is HomeEvent.UpdateCurrentGoalInfo ->
-                    {
-                        binding.apply {
-                            currentGoalLabelText.text = event.history.name
-                            currentGoalText.text = "${event.history.stepGoal} steps"
-                            currentGoalProgressText.text = event.history.stepsDone.toString()
-                            val percentage : Int = floor(event.history.stepsDone.toFloat() / event.history.stepGoal.toFloat() * 100).toInt()
-                            currentGoalProgressPercentage.text = "${(percentage)}%"
-                            if(percentage > 100) {
-                                currentGoalProgressBar.progress = 100
-                            }
-                            else
-                            {
-                                currentGoalProgressBar.progress = percentage
-                            }
-
-                            binding.editTextGoalSteps.clearFocus()
-                        }
-                    }
                     is HomeEvent.ShowInvalidInputMessage ->
                     {
                         Snackbar.make(requireView(),event.msg,Snackbar.LENGTH_SHORT).show()
@@ -111,8 +83,8 @@ class HomeFragment : Fragment(R.layout.fragment_home), HomeAdapter.OnItemClickLi
     }
 
 
-    override fun onItemClick(goal: Goal) {
-        viewModel.onGoalSelected(goal)
+    override fun onItemClick(task: Task) {
+        viewModel.onTaskSelected(task)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -138,8 +110,8 @@ class HomeFragment : Fragment(R.layout.fragment_home), HomeAdapter.OnItemClickLi
                 viewModel.onSortOrderSelected(SortOrder.BY_DATE)
                 true
             }
-            R.id.action_sort_by_goal -> {
-                viewModel.onSortOrderSelected(SortOrder.BY_GOAL)
+            R.id.action_sort_by_task -> {
+                viewModel.onSortOrderSelected(SortOrder.BY_TASK)
                 true
             }
             else -> super.onOptionsItemSelected(item)

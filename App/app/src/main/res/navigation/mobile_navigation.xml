@@ -12,31 +12,25 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/navigation_history"
-        android:name="com.example.steps.ui.history.HistoryFragment"
-        android:label="@string/title_history"
-        tools:layout="@layout/fragment_history" />
-
-    <fragment
-        android:id="@+id/navigation_goals"
-        android:name="com.example.steps.ui.goals.GoalsFragment"
-        android:label="@string/title_goals"
-        tools:layout="@layout/fragment_goals" >
+        android:id="@+id/navigation_tasks"
+        android:name="com.example.steps.ui.tasks.TasksFragment"
+        android:label="@string/title_tasks"
+        tools:layout="@layout/fragment_tasks" >
         <action
-            android:id="@+id/action_navigation_goals_to_addEditGoalFragment"
-            app:destination="@id/addEditGoalFragment" />
+            android:id="@+id/action_navigation_tasks_to_addEditTaskFragment"
+            app:destination="@id/addEditTaskFragment" />
         <action
-            android:id="@+id/action_navigation_goals_to_navigation_setting"
+            android:id="@+id/action_navigation_tasks_to_navigation_setting"
             app:destination="@id/navigation_setting" />
     </fragment>
     <fragment
-        android:id="@+id/addEditGoalFragment"
-        android:name="com.example.steps.ui.addeditgoal.AddEditGoalFragment"
+        android:id="@+id/addEditTaskFragment"
+        android:name="com.example.steps.ui.addedittask.AddEditTaskFragment"
         android:label="{title}"
-        tools:layout="@layout/fragment_add_edit_goal" >
+        tools:layout="@layout/fragment_add_edit_task" >
         <argument
-            android:name="goal"
-            app:argType="com.example.steps.data.Goal"
+            android:name="task"
+            app:argType="com.example.steps.data.Task"
             app:nullable="true"
             android:defaultValue="@null" />
         <argument
@@ -47,6 +41,6 @@
     <fragment
         android:id="@+id/navigation_setting"
         android:name="com.example.steps.ui.settings.SettingsFragment"
-        android:label="@string/title_goals" />
+        android:label="@string/title_tasks" />
 
 </navigation>

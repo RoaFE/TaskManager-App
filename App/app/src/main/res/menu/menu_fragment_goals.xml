@@ -22,8 +22,8 @@
                 android:id="@+id/action_sort_by_date_created"
                 android:title="Sort by date created" />
             <item
-                android:id="@+id/action_sort_by_goal"
-                android:title="Sort by goal size"/>
+                android:id="@+id/action_sort_by_task"
+                android:title="Sort by task size"/>
 
         </menu>
     </item>

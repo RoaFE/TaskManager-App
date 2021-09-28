@@ -14,9 +14,9 @@ import javax.inject.Singleton
 
 private const val TAG = "PreferencesManager"
 
-enum class SortOrder {BY_NAME, BY_DATE, BY_GOAL}
+enum class SortOrder {BY_NAME, BY_DATE, BY_TASK}
 
-data class UserPreferences(val sortOrder: SortOrder, val curGoalId : Int)
+data class UserPreferences(val sortOrder: SortOrder, val curTaskId : Int)
 
 @Singleton
 class PreferencesManager @Inject constructor(@ApplicationContext context: Context) {
@@ -37,8 +37,8 @@ class PreferencesManager @Inject constructor(@ApplicationContext context: Contex
             val sortOrder = SortOrder.valueOf(
                 preferences[PreferencesKeys.SORT_ORDER] ?: SortOrder.BY_NAME.name
             )
-            val curGoal = preferences[PreferencesKeys.CUR_GOAL] ?: 1
-            UserPreferences(sortOrder , curGoal)
+            val curTask = preferences[PreferencesKeys.CUR_TASK] ?: 1
+            UserPreferences(sortOrder , curTask)
         }
 
     suspend fun updateSortOrder(sortOrder: SortOrder) {
@@ -47,15 +47,15 @@ class PreferencesManager @Inject constructor(@ApplicationContext context: Contex
         }
     }
 
-    suspend fun updateCurGoal(id : Int) {
+    suspend fun updateCurTask(id : Int) {
         dataStore.edit { preferences ->
-            preferences[PreferencesKeys.CUR_GOAL] = id
+            preferences[PreferencesKeys.CUR_TASK] = id
         }
     }
 
 
     private object PreferencesKeys {
         val SORT_ORDER = preferencesKey<String>("sort_order")
-        val CUR_GOAL = preferencesKey<Int>("cur_goal")
+        val CUR_TASK = preferencesKey<Int>("cur_task")
     }
 }

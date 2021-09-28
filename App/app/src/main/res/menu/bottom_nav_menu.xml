@@ -7,9 +7,9 @@
         android:title="@string/title_home" />
 
     <item
-        android:id="@+id/navigation_goals"
+        android:id="@+id/navigation_tasks"
         android:icon="@drawable/ic_outline_my_goal_temp_24"
-        android:title="@string/title_goals" />
+        android:title="@string/title_tasks" />
 
     <item
         android:id="@+id/navigation_history"

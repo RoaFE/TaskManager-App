@@ -1,4 +1,4 @@
-package com.example.steps.ui.addeditgoal
+package com.example.steps.ui.addedittask
 
 import android.os.Bundle
 import android.view.View
@@ -11,65 +11,65 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.steps.R
-import com.example.steps.databinding.FragmentAddEditGoalBinding
+import com.example.steps.databinding.FragmentAddEditTaskBinding
 import com.example.steps.util.exhaustive
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
-class AddEditGoalFragment : Fragment(R.layout.fragment_add_edit_goal) {
+class AddEditTaskFragment : Fragment(R.layout.fragment_add_edit_task) {
 
-    private val viewModel: AddEditGoalViewModel by viewModels()
+    private val viewModel: AddEditTaskViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val binding = FragmentAddEditGoalBinding.bind(view)
+        val binding = FragmentAddEditTaskBinding.bind(view)
         binding.apply {
-            editTextGoalName.setText(viewModel.goalName)
-            if (viewModel.goalStepGoal == "null") {
-                editTextGoalSteps.setText("")
-                fabDeleteGoal.isVisible = false
+            editTextTaskName.setText(viewModel.taskName)
+            if (viewModel.taskDescription == "null") {
+                editTextDescription.setText("")
+                fabDeleteTask.isVisible = false
             } else {
-                editTextGoalSteps.setText((viewModel.goalStepGoal))
-                fabDeleteGoal.isVisible = true
+                editTextDescription.setText((viewModel.taskDescription))
+                fabDeleteTask.isVisible = true
             }
-            textViewDateCreated.isVisible = viewModel.goal != null
-            textViewDateCreated.text = "Created: ${viewModel.goal?.createdDateFormated}"
+            textViewDateCreated.isVisible = viewModel.task != null
+            textViewDateCreated.text = "Created: ${viewModel.task?.createdDateFormated}"
 
-            editTextGoalName.addTextChangedListener {
-                viewModel.goalName = it.toString()
-            }
-
-            editTextGoalSteps.addTextChangedListener {
-                viewModel.goalStepGoal = it.toString()
+            editTextTaskName.addTextChangedListener {
+                viewModel.taskName = it.toString()
             }
 
-            fabSavGoal.setOnClickListener {
+            editTextDescription.addTextChangedListener {
+                viewModel.taskDescription = it.toString()
+            }
+
+            fabSavTask.setOnClickListener {
                 viewModel.loadSharedPref(context)
                 viewModel.onSaveClick()
             }
 
-            fabDeleteGoal.setOnClickListener {
+            fabDeleteTask.setOnClickListener {
                 viewModel.onDeleteClick()
             }
         }
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            viewModel.addEditGoalEvent.collect { event ->
+            viewModel.addEditTaskEvent.collect { event ->
                 when (event) {
-                    is AddEditGoalViewModel.AddEditGoalEvent.ShowInvalidInputMessage -> {
+                    is AddEditTaskViewModel.AddEditTaskEvent.ShowInvalidInputMessage -> {
                         Snackbar.make(requireView(),event.msg,Snackbar.LENGTH_LONG).show()
                     }
-                    is AddEditGoalViewModel.AddEditGoalEvent.NavigateBackWithResult -> {
-                        binding.editTextGoalName.clearFocus()
-                        binding.editTextGoalSteps.clearFocus()
+                    is AddEditTaskViewModel.AddEditTaskEvent.NavigateBackWithResult -> {
+                        binding.editTextTaskName.clearFocus()
+                        binding.editTextDescription.clearFocus()
 
                         setFragmentResult(
                             "add_edit_request",
                             bundleOf("add_edit_result" to event.result
-                                , "goal" to event.goal)
+                                , "task" to event.task)
 
                         )
 

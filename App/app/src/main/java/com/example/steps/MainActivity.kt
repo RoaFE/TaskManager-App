@@ -12,7 +12,6 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.example.steps.ui.settings.SettingsFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -29,7 +28,7 @@ class MainActivity : AppCompatActivity() {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(setOf(
-                R.id.navigation_home, R.id.navigation_goals, R.id.navigation_history))
+                R.id.navigation_home, R.id.navigation_tasks, R.id.navigation_history))
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
     }
@@ -56,6 +55,6 @@ class MainActivity : AppCompatActivity() {
 }
 
 
-const val ADD_GOAL_RESULT_OK = Activity.RESULT_FIRST_USER
-const val EDIT_GOAL_RESULT_OK = Activity.RESULT_FIRST_USER + 1
-const val DELETE_GOAL_RESULT_OK = Activity.RESULT_FIRST_USER + 2
+const val ADD_TASK_RESULT_OK = Activity.RESULT_FIRST_USER
+const val EDIT_TASK_RESULT_OK = Activity.RESULT_FIRST_USER + 1
+const val DELETE_TASK_RESULT_OK = Activity.RESULT_FIRST_USER + 2

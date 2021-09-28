@@ -1,6 +1,5 @@
 package com.example.steps.data
 
-import android.util.Log
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
@@ -10,30 +9,24 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Provider
 
-@Database(entities = [Goal::class, History::class],version = 1)
-abstract class GoalDatabase : RoomDatabase() {
+@Database(entities = [Task::class],version = 2)
+abstract class TaskDatabase : RoomDatabase() {
 
-    abstract fun goalDao(): GoalDao
-
-    abstract fun historyDao(): HistoryDao
+    abstract fun taskDao(): TaskDao
 
     class Callback @Inject constructor(
-        private val database: Provider<GoalDatabase>,
+        private val database: Provider<TaskDatabase>,
         @ApplicationScope private val applicationScope : CoroutineScope
     ) : RoomDatabase.Callback() {
         override fun onCreate(db: SupportSQLiteDatabase) {
             super.onCreate(db)
 
             // db operations
-            val goalDao = database.get().goalDao()
-
-            val historyDao = database.get().historyDao()
+            val taskDao = database.get().taskDao()
 
             applicationScope.launch {
-                goalDao.insert(Goal("Day to Day",6000))
-                goalDao.insert(Goal("Go for Gold",10000))
-                goalDao.insert(Goal("Relaxing",1500))
-                //historyDao.insert(History("Day to Day",6000,3000))
+                taskDao.insert(Task("This App","This app I'm creating",5,3,0f))
+                taskDao.insert(Task("Test","Test",2,2,0f))
             }
 
         }

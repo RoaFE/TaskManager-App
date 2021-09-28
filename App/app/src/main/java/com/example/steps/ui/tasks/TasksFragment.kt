@@ -1,4 +1,4 @@
-package com.example.steps.ui.goals
+package com.example.steps.ui.tasks
 
 import android.os.Bundle
 import android.view.*
@@ -11,36 +11,38 @@ import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.steps.R
-import com.example.steps.data.Goal
+import com.example.steps.data.Task
 import com.example.steps.data.SortOrder
-import com.example.steps.databinding.FragmentGoalsBinding
+import com.example.steps.databinding.FragmentTasksBinding
 import com.example.steps.util.exhaustive
 import com.example.steps.util.onQueryTextChanged
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
-class GoalsFragment : Fragment(R.layout.fragment_goals), GoalsAdapter.OnItemClickListener {
+class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClickListener {
 
-    private val viewModel: GoalsViewModel by viewModels()
+    private val viewModel: TasksViewModel by viewModels()
 
+    @InternalCoroutinesApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
 
-        val binding = FragmentGoalsBinding.bind(view)
+        val binding = FragmentTasksBinding.bind(view)
 
-        val goalsAdapter = GoalsAdapter(this)
+        val tasksAdapter = TasksAdapter(this)
 
         binding.apply {
-            recyclerViewGoals.apply {
-                adapter = goalsAdapter
+            recyclerViewTasks.apply {
+                adapter = tasksAdapter
                 layoutManager = LinearLayoutManager(requireContext())
                 setHasFixedSize(true)
             }
 
-            fabAddGoal.setOnClickListener {
+            fabAddTask.setOnClickListener {
                 viewModel.onAddNewTaskClick()
             }
         }
@@ -48,55 +50,55 @@ class GoalsFragment : Fragment(R.layout.fragment_goals), GoalsAdapter.OnItemClic
 
         setFragmentResultListener("add_edit_request") { _, bundle ->
             val result = bundle.getInt("add_edit_result")
-            val goal = bundle.get("goal") as Goal
-            viewModel.onAddEditResult(result, goal)
+            val task = bundle.get("task") as Task
+            viewModel.onAddEditResult(result, task)
         }
 
-        viewModel.goals.observe(viewLifecycleOwner) {
-            goalsAdapter.submitList(it)
+        viewModel.tasks.observe(viewLifecycleOwner) {
+            tasksAdapter.submitList(it)
         }
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            viewModel.goalsEvent.collect { event ->
-                when (event) {
-                    is GoalsViewModel.GoalsEvent.ShowUndoDeleteGoalMessage -> {
-                        Snackbar.make(requireView(), "Goal deleted", Snackbar.LENGTH_LONG)
+            viewModel.tasksEvent.collect { event ->
+                when(event)
+                {
+                    is TasksViewModel.TasksEvent.ShowUndoDeleteTaskMessage -> {
+                        Snackbar.make(requireView(), "Task deleted", Snackbar.LENGTH_LONG)
                             .setAction("UNDO") {
-                                viewModel.onUndoDeleteClick(event.goal)
+                                viewModel.onUndoDeleteClick(event.task)
                             }.show()
                     }
-                    is GoalsViewModel.GoalsEvent.NavigateToAddTaskScreen -> {
+                    is TasksViewModel.TasksEvent.NavigateToAddTaskScreen -> {
                         val action =
-                            GoalsFragmentDirections.actionNavigationGoalsToAddEditGoalFragment(
+                            TasksFragmentDirections.actionNavigationTasksToAddEditTaskFragment(
                                 null,
-                                "New Goal"
+                                "New Task"
                             )
                         findNavController().navigate(action)
                     }
-                    is GoalsViewModel.GoalsEvent.NavigateToEditGoalScreen -> {
+                    is TasksViewModel.TasksEvent.NavigateToEditTaskScreen -> {
                         val action =
-                            GoalsFragmentDirections.actionNavigationGoalsToAddEditGoalFragment(
-                                event.goal,
-                                "Edit Goal"
+                            TasksFragmentDirections.actionNavigationTasksToAddEditTaskFragment(
+                                event.task,
+                                "Edit Task"
                             )
                         findNavController().navigate(action)
                     }
-                    is GoalsViewModel.GoalsEvent.ShowGoalSavedConfirmationMessage -> {
+                    is TasksViewModel.TasksEvent.ShowTaskSavedConfirmationMessage -> {
                         Snackbar.make(requireView(), event.msg, Snackbar.LENGTH_SHORT).show()
                     }
-                    is GoalsViewModel.GoalsEvent.ShowCannotSelectCurrentGoalMessage -> {
+                    is TasksViewModel.TasksEvent.ShowCannotSelectCurrentTaskMessage -> {
                         Snackbar.make(requireView(), event.msg, Snackbar.LENGTH_SHORT).show()
                     }
                 }.exhaustive
             }
         }
-
         setHasOptionsMenu(true)
 
     }
 
-    override fun onItemClick(goal: Goal) {
-        viewModel.onGoalSelected(goal)
+    override fun onItemClick(task: Task) {
+        viewModel.onTaskSelected(task)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -121,8 +123,8 @@ class GoalsFragment : Fragment(R.layout.fragment_goals), GoalsAdapter.OnItemClic
                 viewModel.onSortOrderSelected(SortOrder.BY_DATE)
                 true
             }
-            R.id.action_sort_by_goal -> {
-                viewModel.onSortOrderSelected(SortOrder.BY_GOAL)
+            R.id.action_sort_by_task -> {
+                viewModel.onSortOrderSelected(SortOrder.BY_TASK)
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -135,6 +137,6 @@ class GoalsFragment : Fragment(R.layout.fragment_goals), GoalsAdapter.OnItemClic
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_goals, container, false)
+        return inflater.inflate(R.layout.fragment_tasks, container, false)
     }
 }

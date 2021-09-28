@@ -8,18 +8,18 @@
     tools:context=".ui.home.HomeFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/current_goal_layout"
+        android:id="@+id/current_task_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/current_goal_label_text"
+            android:id="@+id/current_task_label_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="@string/cur_goal_string"
+            android:text="@string/cur_task_string"
             android:textColor="?attr/colorOnPrimary"
             android:textSize="48sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -28,7 +28,7 @@
             app:layout_constraintVertical_weight="1" />
 
         <ProgressBar
-            android:id="@+id/current_goal_progressBar"
+            android:id="@+id/current_task_progressBar"
             android:layout_width="256dp"
             android:layout_height="200dp"
             android:layout_marginTop="16dp"
@@ -40,65 +40,65 @@
             android:secondaryProgress="100"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/current_goal_label_text"
+            app:layout_constraintTop_toBottomOf="@id/current_task_label_text"
             app:layout_constraintVertical_bias="0.114"
             app:layout_constraintVertical_weight="1" />
 
         <TextView
-            android:id="@+id/current_goal_progress_percentage"
+            android:id="@+id/current_task_progress_percentage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="70%"
             android:textColor="@android:color/black"
             android:textSize="24sp"
-            app:layout_constraintBottom_toBottomOf="@+id/current_goal_progressBar"
-            app:layout_constraintEnd_toEndOf="@+id/current_goal_progressBar"
-            app:layout_constraintStart_toStartOf="@+id/current_goal_progressBar"
-            app:layout_constraintTop_toTopOf="@+id/current_goal_progressBar"
+            app:layout_constraintBottom_toBottomOf="@+id/current_task_progressBar"
+            app:layout_constraintEnd_toEndOf="@+id/current_task_progressBar"
+            app:layout_constraintStart_toStartOf="@+id/current_task_progressBar"
+            app:layout_constraintTop_toTopOf="@+id/current_task_progressBar"
             app:layout_constraintVertical_bias="0.38" />
 
         <TextView
-            android:id="@+id/current_goal_progress_text"
+            android:id="@+id/current_task_progress_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="8dp"
             android:text="7000"
             android:textColor="@android:color/black"
             android:textSize="24sp"
-            app:layout_constraintBottom_toBottomOf="@+id/current_goal_slash_text"
-            app:layout_constraintEnd_toStartOf="@+id/current_goal_slash_text"
-            app:layout_constraintTop_toTopOf="@+id/current_goal_slash_text" />
+            app:layout_constraintBottom_toBottomOf="@+id/current_task_slash_text"
+            app:layout_constraintEnd_toStartOf="@+id/current_task_slash_text"
+            app:layout_constraintTop_toTopOf="@+id/current_task_slash_text" />
 
         <TextView
-            android:id="@+id/current_goal__text"
+            android:id="@+id/current_task_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:text="10000steps"
             android:textColor="@android:color/black"
             android:textSize="24sp"
-            app:layout_constraintBottom_toBottomOf="@+id/current_goal_slash_text"
-            app:layout_constraintStart_toEndOf="@+id/current_goal_slash_text" />
+            app:layout_constraintBottom_toBottomOf="@+id/current_task_slash_text"
+            app:layout_constraintStart_toEndOf="@+id/current_task_slash_text" />
 
         <TextView
-            android:id="@+id/current_goal_slash_text"
+            android:id="@+id/current_task_slash_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="/"
             android:textColor="@android:color/black"
             android:textSize="24sp"
-            app:layout_constraintEnd_toEndOf="@+id/current_goal_progressBar"
-            app:layout_constraintStart_toStartOf="@+id/current_goal_progressBar"
-            app:layout_constraintTop_toBottomOf="@+id/current_goal_progress_percentage" />
+            app:layout_constraintEnd_toEndOf="@+id/current_task_progressBar"
+            app:layout_constraintStart_toStartOf="@+id/current_task_progressBar"
+            app:layout_constraintTop_toBottomOf="@+id/current_task_progress_percentage" />
 
         <ScrollView
             android:id="@+id/step_input_scroll_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="@+id/current_goal_progressBar"
-            app:layout_constraintStart_toStartOf="@+id/current_goal_progressBar"
-            app:layout_constraintTop_toBottomOf="@+id/current_goal_slash_text">
+            app:layout_constraintEnd_toEndOf="@+id/current_task_progressBar"
+            app:layout_constraintStart_toStartOf="@+id/current_task_progressBar"
+            app:layout_constraintTop_toBottomOf="@+id/current_task_slash_text">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -107,7 +107,7 @@
 
 
                 <EditText
-                    android:id="@+id/edit_text_goal_steps"
+                    android:id="@+id/edit_text_description"
                     android:layout_width="128dp"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="8dp"
