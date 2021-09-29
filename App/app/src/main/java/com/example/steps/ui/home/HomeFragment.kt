@@ -68,7 +68,6 @@ class HomeFragment : Fragment(R.layout.fragment_home), HomeAdapter.OnItemClickLi
                     }
                     is HomeEvent.UndoAddSteps ->
                     {
-
                         Snackbar.make(requireView(),"Steps Added",Snackbar.LENGTH_LONG)
                             .setAction("UNDO") {
                                 viewModel.onUndoSteps(event.steps)

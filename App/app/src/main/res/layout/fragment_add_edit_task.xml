@@ -46,6 +46,8 @@
                 android:layout_margin="4dp"
                 android:layout_weight="1"/>
             <TextView
+                android:textAlignment="center"
+                android:paddingTop="10dp"
                 android:id="@+id/edit_text_score"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"

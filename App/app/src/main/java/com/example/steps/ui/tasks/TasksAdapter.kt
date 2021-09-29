@@ -40,8 +40,12 @@ class TasksAdapter(private val listener: OnItemClickListener) : ListAdapter<Task
             binding.apply {
                 taskName.text = task.name
                 taskScore.text = task.taskScore.toString()
-                taskFesability.text = task.taskDifficulty.toString()
+                taskScoreText.text = "Score:"
+                taskFeasibility.text = task.taskDifficulty.toString()
+                taskFeasibilityText.text = "Feasibility:"
                 taskPriority.text = task.taskPriority.toString()
+                taskPriorityText.text = "Priority:"
+                taskDesc.text = task.taskDescription
             }
         }
     }

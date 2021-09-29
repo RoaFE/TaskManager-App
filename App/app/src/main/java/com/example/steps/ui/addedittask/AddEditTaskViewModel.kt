@@ -47,6 +47,11 @@ class AddEditTaskViewModel @ViewModelInject constructor(
             field = value
             state.set("taskPriority",value)
         }
+    var taskScore = state.get<Float>("taskScore") ?: task?.taskScore ?: 0f
+        set(value) {
+            field = value
+            state.set("taskScore",value)
+        }
 
     var lockTasks : Boolean = false
 

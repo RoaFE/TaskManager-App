@@ -22,6 +22,11 @@ class AddEditTaskFragment : Fragment(R.layout.fragment_add_edit_task) {
 
     private val viewModel: AddEditTaskViewModel by viewModels()
 
+    fun calculateScore(feasability : Int, priority : Int) : Float
+    {
+        return priority.toFloat() / feasability.toFloat();
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -32,11 +37,13 @@ class AddEditTaskFragment : Fragment(R.layout.fragment_add_edit_task) {
                 editTextDescription.setText("")
                 editTextFeasability.setText("")
                 editTextPriority.setText("")
+                editTextScore.setText("")
                 fabDeleteTask.isVisible = false
             } else {
                 editTextDescription.setText((viewModel.taskDescription))
                 editTextFeasability.setText(viewModel.taskFeasibility.toString())
                 editTextPriority.setText(viewModel.taskPriority.toString())
+                editTextScore.setText(calculateScore(viewModel.taskFeasibility , viewModel.taskPriority).toString())
                 fabDeleteTask.isVisible = true
             }
             textViewDateCreated.isVisible = viewModel.task != null
@@ -59,7 +66,10 @@ class AddEditTaskFragment : Fragment(R.layout.fragment_add_edit_task) {
                 {
                     viewModel.taskFeasibility = it.toString().toInt()
                 }
+                viewModel.taskScore = calculateScore(viewModel.taskFeasibility,viewModel.taskPriority);
+                editTextScore.setText(calculateScore(viewModel.taskFeasibility,viewModel.taskPriority).toString())
             }
+
             editTextPriority.addTextChangedListener {
                 var input = it.toString()
                 if(input == ""){
@@ -69,6 +79,8 @@ class AddEditTaskFragment : Fragment(R.layout.fragment_add_edit_task) {
                 {
                     viewModel.taskPriority = it.toString().toInt()
                 }
+                viewModel.taskScore = calculateScore(viewModel.taskFeasibility,viewModel.taskPriority)
+                editTextScore.setText(calculateScore(viewModel.taskFeasibility,viewModel.taskPriority).toString())
             }
 
             fabSavTask.setOnClickListener {
@@ -104,5 +116,6 @@ class AddEditTaskFragment : Fragment(R.layout.fragment_add_edit_task) {
 
             }
         }
+
     }
 }

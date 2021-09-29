@@ -28,13 +28,9 @@ class TasksViewModel @ViewModelInject constructor(
     private val tasksEventChannel = Channel<TasksEvent>()
     val tasksEvent = tasksEventChannel.receiveAsFlow()
 
-    private var curId : Int = 0
 
     init {
         viewModelScope.launch {
-            preferencesManager.preferencesFlow.collect { preferences ->
-                curId = preferences.curTaskId
-            }
         }
     }
 
@@ -58,12 +54,7 @@ class TasksViewModel @ViewModelInject constructor(
 
 
     fun onTaskSelected(task : Task) = viewModelScope.launch {
-        if(task.id != curId) {
             tasksEventChannel.send(TasksEvent.NavigateToEditTaskScreen(task))
-        }
-        else {
-            tasksEventChannel.send(TasksEvent.ShowCannotSelectCurrentTaskMessage("Cannot edit or delete current active task"))
-        }
     }
 
 
