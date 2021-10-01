@@ -14,7 +14,7 @@ import javax.inject.Singleton
 
 private const val TAG = "PreferencesManager"
 
-enum class SortOrder {BY_NAME, BY_DATE, BY_TASK}
+enum class SortOrder {BY_NAME, BY_DATE, BY_SCORE}
 
 data class UserPreferences(val sortOrder: SortOrder, val curTaskId : Int)
 

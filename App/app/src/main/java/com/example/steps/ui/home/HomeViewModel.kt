@@ -26,13 +26,16 @@ constructor(
 
 
     private var curId : Int = 0
+    private var curTask : Task = Task("","",1,1,0f)
 
 
     init {
         viewModelScope.launch {
 
-            preferencesManager.preferencesFlow.collect { preferences ->
-                curId = preferences.curTaskId
+            var task : Task = taskDao.getTopScoreTask("").first()
+            if(task != null)
+            {
+                curTask = task
             }
         }
     }
@@ -57,10 +60,6 @@ constructor(
         taskDao.getTasks(query,filterPreferences.sortOrder)
     }
 
-    fun onTaskSelected(task : Task) = viewModelScope.launch {
-        preferencesManager.updateCurTask(task.id)
-    }
-
     fun onSortOrderSelected(sortOrder: SortOrder) = viewModelScope.launch {
         preferencesManager.updateSortOrder(sortOrder)
     }
@@ -70,11 +69,17 @@ constructor(
     }
 
     fun onTaskLoad() = viewModelScope.launch {
-        var task : Task = taskDao.getTaskById(curId).first()
-        if(task == null)
+        var task : Task = taskDao.getTopScoreTask("").first()
+        if(task != null)
         {
-            task = Task("Please Create a task","",3,3,0f)
+            curTask = task
         }
+        homeEventChannel.send(HomeEvent.UpdateCurrentTaskInformation(curTask))
+    }
+
+    fun onTaskSelected(task: Task) = viewModelScope.launch {
+        curTask = task
+        homeEventChannel.send(HomeEvent.UpdateCurrentTaskInformation(curTask))
     }
 
     private fun showInvalidInputMessage(text: String) = viewModelScope.launch {
@@ -101,6 +106,7 @@ constructor(
 }
 
 sealed class HomeEvent {
+    data class UpdateCurrentTaskInformation(val task : Task) : HomeEvent()
     data class UndoAddSteps(val steps : Int) : HomeEvent()
     data class ShowInvalidInputMessage(val msg : String) : HomeEvent()
 }

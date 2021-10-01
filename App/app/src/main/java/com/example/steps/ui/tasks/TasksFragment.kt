@@ -123,8 +123,8 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClic
                 viewModel.onSortOrderSelected(SortOrder.BY_DATE)
                 true
             }
-            R.id.action_sort_by_task -> {
-                viewModel.onSortOrderSelected(SortOrder.BY_TASK)
+            R.id.action_sort_by_score -> {
+                viewModel.onSortOrderSelected(SortOrder.BY_SCORE)
                 true
             }
             else -> super.onOptionsItemSelected(item)

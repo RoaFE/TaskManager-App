@@ -40,8 +40,13 @@ class HomeAdapter(private val listener: OnItemClickListener) : ListAdapter<Task,
         fun bind(task: Task) {
             binding.apply {
                 taskName.text = task.name
-                Log.d("HomeAdapter",task.name)
                 taskScore.text = task.taskScore.toString()
+                taskScoreText.text = "Score:"
+                taskFeasibility.text = task.taskDifficulty.toString()
+                taskFeasibilityText.text = "Feasibility:"
+                taskPriority.text = task.taskPriority.toString()
+                taskPriorityText.text = "Priority:"
+                taskDesc.text = task.taskDescription
             }
         }
     }

@@ -17,6 +17,7 @@ import com.example.steps.util.exhaustive
 import com.example.steps.util.onQueryTextChanged
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.item_task.*
 import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
@@ -37,16 +38,6 @@ class HomeFragment : Fragment(R.layout.fragment_home), HomeAdapter.OnItemClickLi
                 adapter = homeAdapter
                 layoutManager = LinearLayoutManager(requireContext())
                 setHasFixedSize(true)
-            }
-
-            editTextDescription.addTextChangedListener {
-                viewModel.stepsIncrement = it.toString()
-            }
-
-            stepInputScrollView.isEnabled = false
-
-            addStepsButton.setOnClickListener {
-                viewModel.onAddSteps()
             }
         }
 
@@ -72,6 +63,14 @@ class HomeFragment : Fragment(R.layout.fragment_home), HomeAdapter.OnItemClickLi
                             .setAction("UNDO") {
                                 viewModel.onUndoSteps(event.steps)
                             }.show()
+                    }
+                    is HomeEvent.UpdateCurrentTaskInformation ->
+                    {
+                        binding.apply {
+                            currentTaskLabelText.text = event.task.name
+                            currentTaskDescription.text = event.task.taskDescription
+                            currentTaskDateCreated.text = event.task.createdDateFormated
+                        }
                     }
                 }.exhaustive
 
@@ -109,8 +108,8 @@ class HomeFragment : Fragment(R.layout.fragment_home), HomeAdapter.OnItemClickLi
                 viewModel.onSortOrderSelected(SortOrder.BY_DATE)
                 true
             }
-            R.id.action_sort_by_task -> {
-                viewModel.onSortOrderSelected(SortOrder.BY_TASK)
+            R.id.action_sort_by_score -> {
+                viewModel.onSortOrderSelected(SortOrder.BY_SCORE)
                 true
             }
             else -> super.onOptionsItemSelected(item)

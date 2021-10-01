@@ -7,131 +7,54 @@
     android:orientation="vertical"
     tools:context=".ui.home.HomeFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
         android:id="@+id/current_task_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="?attr/colorPrimary"
-        app:layout_constraintTop_toTopOf="parent">
+        android:orientation="vertical"
+        android:padding="8dp"
+        android:layout_weight="5">
 
         <TextView
             android:id="@+id/current_task_label_text"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="@string/cur_task_string"
             android:textColor="?attr/colorOnPrimary"
-            android:textSize="48sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_weight="1" />
+            android:textSize="28sp"
+            app:layout_constraintVertical_weight="1"
+            android:layout_margin="8dp"/>
 
-        <ProgressBar
-            android:id="@+id/current_task_progressBar"
-            android:layout_width="256dp"
-            android:layout_height="200dp"
-            android:layout_marginTop="16dp"
-            android:indeterminate="false"
-            android:indeterminateOnly="false"
-            android:max="200"
-            android:progress="70"
-            android:progressDrawable="@drawable/pb_circular_determinative"
-            android:secondaryProgress="100"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/current_task_label_text"
-            app:layout_constraintVertical_bias="0.114"
-            app:layout_constraintVertical_weight="1" />
+
 
         <TextView
-            android:id="@+id/current_task_progress_percentage"
-            android:layout_width="wrap_content"
+            android:id="@+id/current_task_description"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="70%"
+            android:text="Desc"
             android:textColor="@android:color/black"
-            android:textSize="24sp"
-            app:layout_constraintBottom_toBottomOf="@+id/current_task_progressBar"
-            app:layout_constraintEnd_toEndOf="@+id/current_task_progressBar"
-            app:layout_constraintStart_toStartOf="@+id/current_task_progressBar"
-            app:layout_constraintTop_toTopOf="@+id/current_task_progressBar"
-            app:layout_constraintVertical_bias="0.38" />
+            android:textSize="18sp"
+            android:layout_below="@id/current_task_label_text"\
+            android:layout_margin="8dp" />
 
         <TextView
-            android:id="@+id/current_task_progress_text"
-            android:layout_width="wrap_content"
+            android:id="@+id/current_task_date_created"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="8dp"
-            android:text="7000"
-            android:textColor="@android:color/black"
-            android:textSize="24sp"
-            app:layout_constraintBottom_toBottomOf="@+id/current_task_slash_text"
-            app:layout_constraintEnd_toStartOf="@+id/current_task_slash_text"
-            app:layout_constraintTop_toTopOf="@+id/current_task_slash_text" />
-
-        <TextView
-            android:id="@+id/current_task_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:text="10000steps"
-            android:textColor="@android:color/black"
-            android:textSize="24sp"
-            app:layout_constraintBottom_toBottomOf="@+id/current_task_slash_text"
-            app:layout_constraintStart_toEndOf="@+id/current_task_slash_text" />
-
-        <TextView
-            android:id="@+id/current_task_slash_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="/"
-            android:textColor="@android:color/black"
-            android:textSize="24sp"
-            app:layout_constraintEnd_toEndOf="@+id/current_task_progressBar"
-            app:layout_constraintStart_toStartOf="@+id/current_task_progressBar"
-            app:layout_constraintTop_toBottomOf="@+id/current_task_progress_percentage" />
-
-        <ScrollView
-            android:id="@+id/step_input_scroll_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="@+id/current_task_progressBar"
-            app:layout_constraintStart_toStartOf="@+id/current_task_progressBar"
-            app:layout_constraintTop_toBottomOf="@+id/current_task_slash_text">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-
-
-                <EditText
-                    android:id="@+id/edit_text_description"
-                    android:layout_width="128dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:backgroundTint="?attr/colorPrimaryDark"
-                    android:inputType="number"
-                    android:hint="Add Steps"/>
-
-                <Button
-                    android:id="@+id/add_steps_button"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:text="+"
-                    android:textSize="16sp"
-
-                    app:backgroundTint="?attr/colorPrimaryVariant" />
-            </LinearLayout>
-        </ScrollView>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:text="Date"
+            android:textColor="?attr/colorPrimaryVariant"
+            android:textSize="12sp"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="8dp" />
+    </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_home"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="bottom"
-        android:scrollbars="vertical" />
+        android:scrollbars="vertical"
+        android:layout_weight="3"/>
 </LinearLayout>

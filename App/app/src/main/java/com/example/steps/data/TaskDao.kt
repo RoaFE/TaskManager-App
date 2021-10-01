@@ -10,7 +10,7 @@ interface TaskDao {
         when(sortOrder) {
             SortOrder.BY_NAME -> getTasksSortedByName(query)
             SortOrder.BY_DATE -> getTasksSortedByDateCreated(query)
-            SortOrder.BY_TASK -> getTasksSortedByScore(query)
+            SortOrder.BY_SCORE -> getTasksSortedByScore(query)
         }
 
     @Query("SELECT * FROM task_table WHERE id LIKE '%' || :searchQuery || '%'")
@@ -24,6 +24,9 @@ interface TaskDao {
 
     @Query("SELECT * FROM task_table WHERE name LIKE '%' || :searchQuery || '%' ORDER BY taskScore DESC")
     fun getTasksSortedByScore(searchQuery: String): Flow<List<Task>>
+
+    @Query("SELECT * FROM task_table WHERE name LIKE '%' || :searchQuery || '%' ORDER BY taskScore DESC LIMIT 1")
+    fun getTopScoreTask(searchQuery: String): Flow<Task>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(task: Task)
