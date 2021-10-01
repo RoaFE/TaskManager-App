@@ -11,10 +11,14 @@
         android:id="@+id/current_task_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?attr/colorPrimary"
         android:orientation="vertical"
         android:padding="8dp"
-        android:layout_weight="5">
+        android:layout_weight="5"
+        android:elevation="12dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/ui_rect">
 
         <TextView
             android:id="@+id/current_task_label_text"
