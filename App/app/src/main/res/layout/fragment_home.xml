@@ -36,7 +36,7 @@
             android:text="Desc"
             android:textColor="@android:color/black"
             android:textSize="18sp"
-            android:layout_below="@id/current_task_label_text"\
+            android:layout_below="@id/current_task_label_text"
             android:layout_margin="8dp" />
 
         <TextView
