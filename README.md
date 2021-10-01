@@ -5,5 +5,9 @@ An android app to manage tasks that sorts tasks with regards to the tasks priori
 ## TODO
 - [ ] Add sub tasks
 - [ ] Add completion metric
-- [ ] Make tasks reoccurring
+- [ ] Add option to make tasks reoccurring
 - [ ] Add Archive / completion 
+
+## Potential additions / improvements
+- [ ] Update UI and sort out colour theme
+- [ ] Add categories to tasks and filter / sort by category
