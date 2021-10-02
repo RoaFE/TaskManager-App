@@ -3,7 +3,7 @@ package com.example.steps.ui.home
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.widget.SearchView
-import androidx.core.widget.addTextChangedListener
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -17,7 +17,6 @@ import com.example.steps.util.exhaustive
 import com.example.steps.util.onQueryTextChanged
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.item_task.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -42,7 +41,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), HomeAdapter.OnItemClickLi
                 setHasFixedSize(true)
             }
             floatingActionButtonTaskConfirm.setOnClickListener {
-                viewModel.onTaskCompleted()
+                viewModel.onTaskChecked()
             }
         }
 
@@ -75,14 +74,40 @@ class HomeFragment : Fragment(R.layout.fragment_home), HomeAdapter.OnItemClickLi
                             currentTaskLabelText.text = event.task.name
                             currentTaskDescription.text = event.task.taskDescription
                             currentTaskDateCreated.text = event.task.createdDateFormated
+                            floatingActionButtonTaskConfirm.isVisible = true
+                            if(event.task.completed) {
+                                floatingActionButtonTaskConfirm.setImageDrawable(resources.getDrawable(R.drawable.ic_baseline_clear_24))
+                            }
+                            else
+                            {
+                                floatingActionButtonTaskConfirm.setImageDrawable(resources.getDrawable(R.drawable.ic_baseline_check_24))
+                            }
                         }
                     }
-                    is HomeEvent.TaskCompleted ->
+                    is HomeEvent.TaskChecked ->
                     {
-                        Snackbar.make(requireView(),"Task Completed",Snackbar.LENGTH_LONG)
-                            .setAction("UNDO") {
-                                viewModel.onTaskCompletedUndo(event.task)
-                            }.show()
+                        if(event.task.completed) {
+                            Snackbar.make(requireView(), "Task Completed", Snackbar.LENGTH_LONG)
+                                .setAction("UNDO") {
+                                    viewModel.onTaskCompletedUndo(event.task)
+                                }.show()
+                        }
+                        else
+                        {
+                            Snackbar.make(requireView(), "Task Reopened", Snackbar.LENGTH_LONG)
+                                .setAction("UNDO") {
+                                    viewModel.onTaskCompletedUndo(event.task)
+                                }.show()
+                        }
+                    }
+                    is HomeEvent.ClearCurrentTaskInformation ->
+                    {
+                        binding.apply {
+                            currentTaskLabelText.text = "Create a task"
+                            currentTaskDescription.text = "No current active tasks available, please go to the task tab and create a task"
+                            currentTaskDateCreated.text = ""
+                            floatingActionButtonTaskConfirm.isVisible = false
+                        }
                     }
                 }.exhaustive
 

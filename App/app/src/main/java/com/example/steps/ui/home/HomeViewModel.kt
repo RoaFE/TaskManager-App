@@ -78,8 +78,12 @@ constructor(
         if(task != null)
         {
             curTask = task
+            homeEventChannel.send(HomeEvent.UpdateCurrentTaskInformation(curTask))
         }
-        homeEventChannel.send(HomeEvent.UpdateCurrentTaskInformation(curTask))
+        else
+        {
+            homeEventChannel.send(HomeEvent.ClearCurrentTaskInformation)
+        }
     }
 
     fun onTaskSelected(task: Task) = viewModelScope.launch {
@@ -87,10 +91,10 @@ constructor(
         homeEventChannel.send(HomeEvent.UpdateCurrentTaskInformation(curTask))
     }
 
-    fun onTaskCompleted() = viewModelScope.launch {
-        val updatedTask = curTask.copy(completed = true)
+    fun onTaskChecked() = viewModelScope.launch {
+        val updatedTask = curTask.copy(completed = !curTask.completed)
         taskDao.update(updatedTask)
-        homeEventChannel.send(HomeEvent.TaskCompleted(updatedTask))
+        homeEventChannel.send(HomeEvent.TaskChecked(updatedTask))
         onTaskLoad()
     }
 
@@ -124,8 +128,9 @@ constructor(
 }
 
 sealed class HomeEvent {
-    data class TaskCompleted(val task: Task) : HomeEvent()
+    data class TaskChecked(val task: Task) : HomeEvent()
     data class UpdateCurrentTaskInformation(val task : Task) : HomeEvent()
+    object ClearCurrentTaskInformation : HomeEvent()
     data class UndoAddSteps(val steps : Int) : HomeEvent()
     data class ShowInvalidInputMessage(val msg : String) : HomeEvent()
 }
