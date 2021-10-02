@@ -19,6 +19,8 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.item_task.*
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class HomeFragment : Fragment(R.layout.fragment_home), HomeAdapter.OnItemClickListener {
@@ -38,6 +40,9 @@ class HomeFragment : Fragment(R.layout.fragment_home), HomeAdapter.OnItemClickLi
                 adapter = homeAdapter
                 layoutManager = LinearLayoutManager(requireContext())
                 setHasFixedSize(true)
+            }
+            floatingActionButtonTaskConfirm.setOnClickListener {
+                viewModel.onTaskCompleted()
             }
         }
 
@@ -72,6 +77,13 @@ class HomeFragment : Fragment(R.layout.fragment_home), HomeAdapter.OnItemClickLi
                             currentTaskDateCreated.text = event.task.createdDateFormated
                         }
                     }
+                    is HomeEvent.TaskCompleted ->
+                    {
+                        Snackbar.make(requireView(),"Task Completed",Snackbar.LENGTH_LONG)
+                            .setAction("UNDO") {
+                                viewModel.onTaskCompletedUndo(event.task)
+                            }.show()
+                    }
                 }.exhaustive
 
             }
@@ -95,6 +107,11 @@ class HomeFragment : Fragment(R.layout.fragment_home), HomeAdapter.OnItemClickLi
             viewModel.searchQuery.value = it
         }
 
+        viewLifecycleOwner.lifecycleScope.launch {
+            menu.findItem(R.id.action_hide_completed).isChecked =
+                viewModel.preferencesFlow.first().hideCompleted
+        }
+
     }
 
 
@@ -110,6 +127,11 @@ class HomeFragment : Fragment(R.layout.fragment_home), HomeAdapter.OnItemClickLi
             }
             R.id.action_sort_by_score -> {
                 viewModel.onSortOrderSelected(SortOrder.BY_SCORE)
+                true
+            }
+            R.id.action_hide_completed -> {
+                item.isChecked = !item.isChecked
+                viewModel.onHideCompletedTask(item.isChecked)
                 true
             }
             else -> super.onOptionsItemSelected(item)

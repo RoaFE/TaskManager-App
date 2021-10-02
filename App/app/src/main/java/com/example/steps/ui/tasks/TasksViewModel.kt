@@ -42,7 +42,7 @@ class TasksViewModel @ViewModelInject constructor(
     ) { query, filterPreferences ->
         Pair(query,filterPreferences)
     }.flatMapLatest { (query, filterPreferences) ->
-        taskDao.getTasks(query,filterPreferences.sortOrder)
+        taskDao.getTasks(query,filterPreferences.sortOrder,filterPreferences.hideCompleted)
     }
 
     val tasks = tasksFlow.asLiveData()
@@ -51,7 +51,9 @@ class TasksViewModel @ViewModelInject constructor(
         preferencesManager.updateSortOrder(sortOrder)
     }
 
-
+    fun onHideCompletedTask(checked : Boolean) = viewModelScope.launch {
+        preferencesManager.updateHideCompleted(checked)
+    }
 
     fun onTaskSelected(task : Task) = viewModelScope.launch {
             tasksEventChannel.send(TasksEvent.NavigateToEditTaskScreen(task))

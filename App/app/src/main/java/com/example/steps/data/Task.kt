@@ -16,6 +16,7 @@ data class Task(
     val taskCompletion : Float,
     val taskScore : Float = taskPriority.toFloat() / taskDifficulty.toFloat(),
     val dateCreated : Long = System.currentTimeMillis(),
+    val completed : Boolean = false,
     @PrimaryKey(autoGenerate = true) val id: Int = 0
 ) :Parcelable {
     val createdDateFormated: String

@@ -20,6 +20,8 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClickListener {
@@ -111,6 +113,10 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClic
             viewModel.searchQuery.value = it
         }
 
+        viewLifecycleOwner.lifecycleScope.launch {
+            menu.findItem(R.id.action_hide_completed).isChecked =
+                viewModel.preferencesFlow.first().hideCompleted
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -125,6 +131,11 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClic
             }
             R.id.action_sort_by_score -> {
                 viewModel.onSortOrderSelected(SortOrder.BY_SCORE)
+                true
+            }
+            R.id.action_hide_completed -> {
+                item.isChecked = !item.isChecked
+                viewModel.onHideCompletedTask(item.isChecked)
                 true
             }
             else -> super.onOptionsItemSelected(item)

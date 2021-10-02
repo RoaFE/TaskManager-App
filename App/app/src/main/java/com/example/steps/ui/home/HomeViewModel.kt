@@ -55,13 +55,18 @@ constructor(
         searchQuery,
         preferencesFlow
     ) { query, filterPreferences ->
+        
         Pair(query,filterPreferences)
     }.flatMapLatest { (query, filterPreferences) ->
-        taskDao.getTasks(query,filterPreferences.sortOrder)
+        taskDao.getTasks(query,filterPreferences.sortOrder,filterPreferences.hideCompleted)
     }
 
     fun onSortOrderSelected(sortOrder: SortOrder) = viewModelScope.launch {
         preferencesManager.updateSortOrder(sortOrder)
+    }
+
+    fun onHideCompletedTask(checked : Boolean) = viewModelScope.launch {
+        preferencesManager.updateHideCompleted(checked)
     }
 
     private fun updateSteps(steps : Int) = viewModelScope.launch{
@@ -80,6 +85,19 @@ constructor(
     fun onTaskSelected(task: Task) = viewModelScope.launch {
         curTask = task
         homeEventChannel.send(HomeEvent.UpdateCurrentTaskInformation(curTask))
+    }
+
+    fun onTaskCompleted() = viewModelScope.launch {
+        val updatedTask = curTask.copy(completed = true)
+        taskDao.update(updatedTask)
+        homeEventChannel.send(HomeEvent.TaskCompleted(updatedTask))
+        onTaskLoad()
+    }
+
+    fun onTaskCompletedUndo(task : Task) = viewModelScope.launch {
+        val updatedTask = task.copy(completed = false)
+        taskDao.update(updatedTask)
+        onTaskLoad()
     }
 
     private fun showInvalidInputMessage(text: String) = viewModelScope.launch {
@@ -106,6 +124,7 @@ constructor(
 }
 
 sealed class HomeEvent {
+    data class TaskCompleted(val task: Task) : HomeEvent()
     data class UpdateCurrentTaskInformation(val task : Task) : HomeEvent()
     data class UndoAddSteps(val steps : Int) : HomeEvent()
     data class ShowInvalidInputMessage(val msg : String) : HomeEvent()
