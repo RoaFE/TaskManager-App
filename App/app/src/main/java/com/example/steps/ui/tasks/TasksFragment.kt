@@ -1,8 +1,10 @@
 package com.example.steps.ui.tasks
 
+import android.app.ActionBar
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -17,6 +19,7 @@ import com.example.steps.databinding.FragmentTasksBinding
 import com.example.steps.util.exhaustive
 import com.example.steps.util.onQueryTextChanged
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.tabs.TabLayout
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.collect
@@ -28,6 +31,8 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClic
 
     private val viewModel: TasksViewModel by viewModels()
 
+    private var tabIndex : Int = 0
+
     @InternalCoroutinesApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -37,6 +42,7 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClic
 
         val tasksAdapter = TasksAdapter(this)
 
+        val archiveTasksAdapter = TasksAdapter(this)
         binding.apply {
             recyclerViewTasks.apply {
                 adapter = tasksAdapter
@@ -44,9 +50,46 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClic
                 setHasFixedSize(true)
             }
 
+            recyclerViewArchiveTasks.apply {
+                adapter = archiveTasksAdapter
+                layoutManager = LinearLayoutManager(requireContext())
+                setHasFixedSize(true)
+            }
+
             fabAddTask.setOnClickListener {
                 viewModel.onAddNewTaskClick()
             }
+
+
+            tabViewTasks.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+
+                override fun onTabSelected(tab: TabLayout.Tab?) {
+                    if (tab != null) {
+                        if (tab.position == 0)
+                        {
+                            binding.apply {
+                                recyclerViewTasks.isVisible = true
+                                recyclerViewArchiveTasks.isVisible = false
+                            }
+                        }
+                        else if (tab.position == 1)
+                        {
+                            binding.apply {
+                                recyclerViewTasks.isVisible = false
+                                recyclerViewArchiveTasks.isVisible = true
+                            }
+                        }
+                    }
+                }
+
+                override fun onTabReselected(tab: TabLayout.Tab?) {
+
+                }
+
+                override fun onTabUnselected(tab: TabLayout.Tab?) {
+                    // Handle tab unselect
+                }
+            })
         }
 
 
@@ -59,6 +102,11 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClic
         viewModel.tasks.observe(viewLifecycleOwner) {
             tasksAdapter.submitList(it)
         }
+
+        viewModel.archiveTasks.observe(viewLifecycleOwner) {
+            archiveTasksAdapter.submitList(it)
+        }
+
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.tasksEvent.collect { event ->
@@ -102,6 +150,9 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClic
     override fun onItemClick(task: Task) {
         viewModel.onTaskSelected(task)
     }
+
+
+
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_fragment_goals, menu)

@@ -34,6 +34,7 @@ class TasksViewModel @ViewModelInject constructor(
         }
     }
 
+    var tabPos = 0
 
 
     private val tasksFlow = combine(
@@ -45,7 +46,23 @@ class TasksViewModel @ViewModelInject constructor(
         taskDao.getTasks(query,filterPreferences.sortOrder,filterPreferences.hideCompleted)
     }
 
-    val tasks = tasksFlow.asLiveData()
+    var tasks = tasksFlow.asLiveData()
+
+    private val tasksArchiveFlow = combine(
+        searchQuery.asFlow(),
+        preferencesFlow
+    ) { query, filterPreferences ->
+        Pair(query,filterPreferences)
+    }.flatMapLatest { (query, filterPreferences) ->
+        taskDao.getCompletedTasks(query,filterPreferences.sortOrder,filterPreferences.hideCompleted)
+    }
+
+    val archiveTasks = tasksArchiveFlow.asLiveData()
+
+    fun updateTab( pos:Int )
+    {
+        tabPos = pos
+    }
 
     fun onSortOrderSelected(sortOrder: SortOrder) = viewModelScope.launch {
         preferencesManager.updateSortOrder(sortOrder)
@@ -56,7 +73,7 @@ class TasksViewModel @ViewModelInject constructor(
     }
 
     fun onTaskSelected(task : Task) = viewModelScope.launch {
-            tasksEventChannel.send(TasksEvent.NavigateToEditTaskScreen(task))
+        tasksEventChannel.send(TasksEvent.NavigateToEditTaskScreen(task))
     }
 
 
