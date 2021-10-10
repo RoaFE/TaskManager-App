@@ -4,6 +4,7 @@ import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.example.steps.ADD_TASK_RESULT_OK
+import com.example.steps.COPY_TASK_RESULT_OK
 import com.example.steps.DELETE_TASK_RESULT_OK
 import com.example.steps.EDIT_TASK_RESULT_OK
 import com.example.steps.data.Task
@@ -73,7 +74,13 @@ class TasksViewModel @ViewModelInject constructor(
     }
 
     fun onTaskSelected(task : Task) = viewModelScope.launch {
-        tasksEventChannel.send(TasksEvent.NavigateToEditTaskScreen(task))
+        if(tabPos == 0) {
+            tasksEventChannel.send(TasksEvent.NavigateToEditTaskScreen(task))
+        }
+        else if (tabPos == 1)
+        {
+            tasksEventChannel.send(TasksEvent.NavigateToViewArchiveTaskScreen(task))
+        }
     }
 
 
@@ -90,6 +97,7 @@ class TasksViewModel @ViewModelInject constructor(
             ADD_TASK_RESULT_OK -> showTaskSavedConfirmationMessage("Task added")
             EDIT_TASK_RESULT_OK -> showTaskSavedConfirmationMessage("Task updated")
             DELETE_TASK_RESULT_OK -> showUndoDeleteTaskMessage("Task deleted",task)
+            COPY_TASK_RESULT_OK -> showTaskSavedConfirmationMessage("Task copied")
         }
     }
 
@@ -105,9 +113,11 @@ class TasksViewModel @ViewModelInject constructor(
     sealed class TasksEvent {
         object NavigateToAddTaskScreen : TasksEvent()
         data class NavigateToEditTaskScreen(val task: Task) : TasksEvent()
+        data class NavigateToViewArchiveTaskScreen(val task: Task) : TasksEvent()
         data class ShowUndoDeleteTaskMessage(val task: Task) : TasksEvent()
         data class ShowCannotSelectCurrentTaskMessage(val msg : String) : TasksEvent()
         data class ShowTaskSavedConfirmationMessage(val msg : String) : TasksEvent()
+        data class ShowTaskCopiedConfirmationMessage(val msg : String) : TasksEvent()
     }
 
 }

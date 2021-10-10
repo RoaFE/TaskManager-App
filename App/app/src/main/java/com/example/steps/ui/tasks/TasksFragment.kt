@@ -31,8 +31,6 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClic
 
     private val viewModel: TasksViewModel by viewModels()
 
-    private var tabIndex : Int = 0
-
     @InternalCoroutinesApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -48,23 +46,27 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClic
                 adapter = tasksAdapter
                 layoutManager = LinearLayoutManager(requireContext())
                 setHasFixedSize(true)
+                isVisible = viewModel.tabPos == 0
             }
 
             recyclerViewArchiveTasks.apply {
                 adapter = archiveTasksAdapter
                 layoutManager = LinearLayoutManager(requireContext())
                 setHasFixedSize(true)
+                isVisible = viewModel.tabPos == 1
             }
+
+            tabViewTasks.selectTab(tabViewTasks.getTabAt(viewModel.tabPos))
 
             fabAddTask.setOnClickListener {
                 viewModel.onAddNewTaskClick()
             }
 
-
             tabViewTasks.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
 
                 override fun onTabSelected(tab: TabLayout.Tab?) {
                     if (tab != null) {
+                        viewModel.updateTab(tab.position)
                         if (tab.position == 0)
                         {
                             binding.apply {
@@ -134,10 +136,21 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClic
                             )
                         findNavController().navigate(action)
                     }
+                    is TasksViewModel.TasksEvent.NavigateToViewArchiveTaskScreen -> {
+                        val action =
+                            TasksFragmentDirections.actionNavigationTasksToViewCopyArchiveTaskFragment(
+                                event.task
+                            )
+                        findNavController().navigate(action)
+                    }
                     is TasksViewModel.TasksEvent.ShowTaskSavedConfirmationMessage -> {
                         Snackbar.make(requireView(), event.msg, Snackbar.LENGTH_SHORT).show()
                     }
                     is TasksViewModel.TasksEvent.ShowCannotSelectCurrentTaskMessage -> {
+                        Snackbar.make(requireView(), event.msg, Snackbar.LENGTH_SHORT).show()
+                    }
+                    is TasksViewModel.TasksEvent.ShowTaskCopiedConfirmationMessage ->
+                    {
                         Snackbar.make(requireView(), event.msg, Snackbar.LENGTH_SHORT).show()
                     }
                 }.exhaustive

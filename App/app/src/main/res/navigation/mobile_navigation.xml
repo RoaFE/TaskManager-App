@@ -22,6 +22,9 @@
         <action
             android:id="@+id/action_navigation_tasks_to_navigation_setting"
             app:destination="@id/navigation_setting" />
+        <action
+            android:id="@+id/action_navigation_tasks_to_viewCopyArchiveTaskFragment"
+            app:destination="@id/viewCopyArchiveTaskFragment" />
     </fragment>
     <fragment
         android:id="@+id/addEditTaskFragment"
@@ -42,5 +45,14 @@
         android:id="@+id/navigation_setting"
         android:name="com.example.steps.ui.settings.SettingsFragment"
         android:label="@string/title_tasks" />
+    <fragment
+        android:id="@+id/viewCopyArchiveTaskFragment"
+        android:name="com.example.steps.ui.addedittask.ViewCopyArchiveTaskFragment"
+        android:label="ArchivedTask"
+        tools:layout="@layout/fragment_view_copy_archive_task">
+        <argument
+            android:name="task"
+            app:argType="com.example.steps.data.Task" />
+    </fragment>
 
 </navigation>
