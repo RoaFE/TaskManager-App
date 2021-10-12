@@ -55,7 +55,7 @@ class TasksViewModel @ViewModelInject constructor(
     ) { query, filterPreferences ->
         Pair(query,filterPreferences)
     }.flatMapLatest { (query, filterPreferences) ->
-        taskDao.getCompletedTasks(query,filterPreferences.sortOrder,filterPreferences.hideCompleted)
+        taskDao.getCompletedTasks(query,filterPreferences.sortOrder)
     }
 
     val archiveTasks = tasksArchiveFlow.asLiveData()

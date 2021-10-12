@@ -16,6 +16,7 @@ import com.example.steps.databinding.FragmentHomeBinding
 import com.example.steps.util.exhaustive
 import com.example.steps.util.onQueryTextChanged
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.tabs.TabLayout
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
@@ -33,16 +34,55 @@ class HomeFragment : Fragment(R.layout.fragment_home), HomeAdapter.OnItemClickLi
         val binding = FragmentHomeBinding.bind(view)
 
         val homeAdapter = HomeAdapter(this)
+        val shortTermTasksAdapter = HomeAdapter (this)
+        val longTermTasksAdapter = HomeAdapter (this)
 
         binding.apply {
+
+            recyclerViewHome.isVisible = viewModel.curTab == 0
+            recyclerViewShortTerm.isVisible = viewModel.curTab == 1
+            recyclerViewLongTerm.isVisible = viewModel.curTab == 2
+
             recyclerViewHome.apply {
                 adapter = homeAdapter
+                layoutManager = LinearLayoutManager(requireContext())
+                setHasFixedSize(true)
+            }
+            recyclerViewLongTerm.apply {
+                adapter = longTermTasksAdapter
+                layoutManager = LinearLayoutManager(requireContext())
+                setHasFixedSize(true)
+            }
+            recyclerViewShortTerm.apply {
+                adapter = shortTermTasksAdapter
                 layoutManager = LinearLayoutManager(requireContext())
                 setHasFixedSize(true)
             }
             floatingActionButtonTaskConfirm.setOnClickListener {
                 viewModel.onTaskChecked()
             }
+
+            tabTaskTerms.selectTab(tabTaskTerms.getTabAt(viewModel.curTab))
+
+            tabTaskTerms.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+
+                override fun onTabSelected(tab: TabLayout.Tab?) {
+                    if (tab != null) {
+                        viewModel.updateTab(tab.position)
+                        recyclerViewHome.isVisible = viewModel.curTab == 0
+                        recyclerViewShortTerm.isVisible = viewModel.curTab == 1
+                        recyclerViewLongTerm.isVisible = viewModel.curTab == 2
+                    }
+                }
+
+                override fun onTabReselected(tab: TabLayout.Tab?) {
+
+                }
+
+                override fun onTabUnselected(tab: TabLayout.Tab?) {
+                    // Handle tab unselect
+                }
+            })
         }
 
 
@@ -51,6 +91,14 @@ class HomeFragment : Fragment(R.layout.fragment_home), HomeAdapter.OnItemClickLi
         viewModel.tasks.observe(viewLifecycleOwner) {
             homeAdapter.submitList(it)
             viewModel.onTaskLoad()
+        }
+
+        viewModel.shortTermTasks.observe(viewLifecycleOwner) {
+            shortTermTasksAdapter.submitList(it)
+        }
+
+        viewModel.longTermTasks.observe(viewLifecycleOwner) {
+            longTermTasksAdapter.submitList(it)
         }
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
@@ -74,6 +122,14 @@ class HomeFragment : Fragment(R.layout.fragment_home), HomeAdapter.OnItemClickLi
                             currentTaskLabelText.text = event.task.name
                             currentTaskDescription.text = event.task.taskDescription
                             currentTaskDateCreated.text = event.task.createdDateFormated
+                            if(event.task.longTerm)
+                            {
+                                currentTaskGoalTerm.text = "Long Term Goal"
+                            }
+                            else
+                            {
+                                currentTaskGoalTerm.text = "Short Term Goal"
+                            }
                             floatingActionButtonTaskConfirm.isVisible = true
                             if(event.task.completed) {
                                 floatingActionButtonTaskConfirm.setImageDrawable(resources.getDrawable(R.drawable.ic_baseline_clear_24))
@@ -113,6 +169,9 @@ class HomeFragment : Fragment(R.layout.fragment_home), HomeAdapter.OnItemClickLi
 
             }
         }
+
+
+
 
         setHasOptionsMenu(true)
     }

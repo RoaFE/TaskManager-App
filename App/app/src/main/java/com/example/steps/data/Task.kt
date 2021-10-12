@@ -13,7 +13,7 @@ data class Task(
     val taskDescription : String,
     val taskPriority : Int,
     val taskDifficulty : Int,
-    val taskCompletion : Float,
+    val longTerm : Boolean = false,
     val taskScore : Float = taskPriority.toFloat() / taskDifficulty.toFloat(),
     val dateCreated : Long = System.currentTimeMillis(),
     val completed : Boolean = false,

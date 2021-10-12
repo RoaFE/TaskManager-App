@@ -81,7 +81,7 @@ class ViewCopyArchiveTaskViewModel @ViewModelInject constructor(
 
     private fun copyTask(task: Task) = viewModelScope.launch {
         if (task != null) {
-            var newTask : Task = Task(task.name,task.taskDescription,task.taskPriority,task.taskDifficulty,task.taskCompletion, task.taskScore)
+            var newTask : Task = Task(task.name,task.taskDescription,task.taskPriority,task.taskDifficulty,task.longTerm, task.taskScore)
             taskDao.insert(newTask)
             copyArchiveTaskEventChannel.send(
                 CopyArchiveTaskEvent.NavigateBackWithResult(

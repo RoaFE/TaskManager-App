@@ -52,6 +52,7 @@ class AddEditTaskViewModel @ViewModelInject constructor(
             field = value
             state.set("taskScore",value)
         }
+    var taskTerm = state.get<Boolean>("taskTerm") ?: task?.longTerm ?: false
 
     var lockTasks : Boolean = false
 
@@ -70,10 +71,10 @@ class AddEditTaskViewModel @ViewModelInject constructor(
                 showInvalidInputMessage("Tasks are locked and can't be edited")
                 return
             }
-            val updatedTask = task.copy(name = taskName,taskDescription = taskDescription,taskPriority = taskPriority,taskDifficulty = taskFeasibility,taskScore = taskPriority.toFloat() / taskFeasibility.toFloat())
+            val updatedTask = task.copy(name = taskName,taskDescription = taskDescription,taskPriority = taskPriority,taskDifficulty = taskFeasibility, longTerm = taskTerm,taskScore = taskPriority.toFloat() / taskFeasibility.toFloat())
             updateTask(updatedTask)
         } else {
-            val newTask = Task(name = taskName,taskDescription = taskDescription,taskPriority = taskPriority,taskDifficulty = taskFeasibility,taskCompletion = 0f,taskScore = taskPriority.toFloat() / taskFeasibility.toFloat())
+            val newTask = Task(name = taskName,taskDescription = taskDescription,taskPriority = taskPriority,taskDifficulty = taskFeasibility,longTerm = taskTerm,taskScore = taskPriority.toFloat() / taskFeasibility.toFloat())
             createTask(newTask)
         }
     }
@@ -84,6 +85,11 @@ class AddEditTaskViewModel @ViewModelInject constructor(
         }
     }
 
+    fun onChecked(checked : Boolean)
+    {
+        taskTerm = checked
+    }
+
 
     private fun deleteTask(task: Task) = viewModelScope.launch {
         if (task != null) {
@@ -91,6 +97,8 @@ class AddEditTaskViewModel @ViewModelInject constructor(
             addEditTaskEventChannel.send(AddEditTaskEvent.NavigateBackWithResult(DELETE_TASK_RESULT_OK,task))
         }
     }
+
+
 
     private fun createTask(task: Task) = viewModelScope.launch {
         taskDao.insert(task)

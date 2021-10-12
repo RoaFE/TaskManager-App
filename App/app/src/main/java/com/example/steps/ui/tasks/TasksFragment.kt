@@ -56,11 +56,13 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClic
                 isVisible = viewModel.tabPos == 1
             }
 
-            tabViewTasks.selectTab(tabViewTasks.getTabAt(viewModel.tabPos))
+
 
             fabAddTask.setOnClickListener {
                 viewModel.onAddNewTaskClick()
             }
+
+            tabViewTasks.selectTab(tabViewTasks.getTabAt(viewModel.tabPos))
 
             tabViewTasks.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
 

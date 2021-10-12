@@ -26,7 +26,8 @@ constructor(
 
 
     private var curId : Int = 0
-    private var curTask : Task = Task("","",1,1,0f)
+    var curTab = 0
+    private var curTask : Task = Task("","",1,1)
 
 
     init {
@@ -61,6 +62,26 @@ constructor(
         taskDao.getTasks(query,filterPreferences.sortOrder,filterPreferences.hideCompleted)
     }
 
+    private val tasksShortTermFlow = combine(
+        searchQuery,
+        preferencesFlow
+    ) { query, filterPreferences ->
+
+        Pair(query,filterPreferences)
+    }.flatMapLatest { (query, filterPreferences) ->
+        taskDao.getTasksByTerm(query,filterPreferences.sortOrder,false)
+    }
+
+    private val tasksLongTermFlow = combine(
+        searchQuery,
+        preferencesFlow
+    ) { query, filterPreferences ->
+
+        Pair(query,filterPreferences)
+    }.flatMapLatest { (query, filterPreferences) ->
+        taskDao.getTasksByTerm(query,filterPreferences.sortOrder,true)
+    }
+
     fun onSortOrderSelected(sortOrder: SortOrder) = viewModelScope.launch {
         preferencesManager.updateSortOrder(sortOrder)
     }
@@ -86,6 +107,11 @@ constructor(
         }
     }
 
+    fun updateTab(position : Int)
+    {
+        curTab = position
+    }
+
     fun onTaskSelected(task: Task) = viewModelScope.launch {
         curTask = task
         homeEventChannel.send(HomeEvent.UpdateCurrentTaskInformation(curTask))
@@ -108,22 +134,13 @@ constructor(
         homeEventChannel.send(HomeEvent.ShowInvalidInputMessage(text))
     }
 
-    fun onAddSteps() {
-        if(stepsIncrement.isBlank())
-        {
-            showInvalidInputMessage("Add steps can't be empty")
-            return
-        }
-        var steps : Int = stepsIncrement.toInt()
-        updateSteps(steps)
-    }
 
     fun onUndoSteps(steps: Int) = viewModelScope.launch {
     }
 
     val tasks = tasksFlow.asLiveData()
-
-
+    val shortTermTasks = tasksShortTermFlow.asLiveData()
+    val longTermTasks = tasksLongTermFlow.asLiveData()
 
 }
 

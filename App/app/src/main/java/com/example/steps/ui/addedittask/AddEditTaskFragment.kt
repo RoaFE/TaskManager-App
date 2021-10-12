@@ -38,12 +38,24 @@ class AddEditTaskFragment : Fragment(R.layout.fragment_add_edit_task) {
                 editTextFeasability.setText("")
                 editTextPriority.setText("")
                 editTextScore.setText("")
+                longTermSwitch.setText("Short Term")
+                longTermSwitch.isChecked = false
                 fabDeleteTask.isVisible = false
             } else {
                 editTextDescription.setText((viewModel.taskDescription))
                 editTextFeasability.setText(viewModel.taskFeasibility.toString())
                 editTextPriority.setText(viewModel.taskPriority.toString())
                 editTextScore.setText(calculateScore(viewModel.taskFeasibility , viewModel.taskPriority).toString())
+
+                longTermSwitch.isChecked = viewModel.taskTerm
+                if(viewModel.taskTerm)
+                {
+                    longTermSwitch.setText("Long Term")
+                }
+                else
+                {
+                    longTermSwitch.setText("Short Term")
+                }
                 fabDeleteTask.isVisible = true
             }
             textViewDateCreated.isVisible = viewModel.task != null
@@ -81,6 +93,18 @@ class AddEditTaskFragment : Fragment(R.layout.fragment_add_edit_task) {
                 }
                 viewModel.taskScore = calculateScore(viewModel.taskFeasibility,viewModel.taskPriority)
                 editTextScore.setText(calculateScore(viewModel.taskFeasibility,viewModel.taskPriority).toString())
+            }
+
+            longTermSwitch.setOnCheckedChangeListener {_,isChecked ->
+                viewModel.onChecked(isChecked)
+                if(isChecked)
+                {
+                    longTermSwitch.setText("Long Term")
+                }
+                else
+                {
+                    longTermSwitch.setText("Short Term")
+                }
             }
 
             fabSavTask.setOnClickListener {

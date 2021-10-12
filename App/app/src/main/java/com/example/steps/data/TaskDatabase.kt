@@ -25,8 +25,8 @@ abstract class TaskDatabase : RoomDatabase() {
             val taskDao = database.get().taskDao()
 
             applicationScope.launch {
-                taskDao.insert(Task("This App","This app I'm creating",5,3,0f))
-                taskDao.insert(Task("Test","Test",2,2,0f))
+                taskDao.insert(Task("This App","This app I'm creating",5,3,false))
+                taskDao.insert(Task("Test","Test",2,2,true))
             }
 
         }
