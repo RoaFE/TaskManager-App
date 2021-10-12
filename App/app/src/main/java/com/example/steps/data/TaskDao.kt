@@ -60,6 +60,9 @@ interface TaskDao {
     @Query("SELECT * FROM task_table WHERE name LIKE '%' || :searchQuery || '%' AND completed = 0 ORDER BY taskScore DESC LIMIT 1")
     fun getTopScoreTask(searchQuery: String): Flow<Task>
 
+    @Query("SELECT * FROM task_table WHERE longTerm = :term AND name LIKE '%' || :searchQuery || '%' AND completed = 0 ORDER BY taskScore DESC LIMIT 1")
+    fun getTopTermScoreTask(searchQuery: String, term: Boolean): Flow<Task>
+
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(task: Task)

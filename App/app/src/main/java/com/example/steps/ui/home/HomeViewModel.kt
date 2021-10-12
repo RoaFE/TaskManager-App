@@ -38,6 +38,12 @@ constructor(
             {
                 curTask = task
             }
+
+            preferencesManager.preferencesFlow.collect { preferences ->
+                curTab = preferences.curHomeTab
+            }
+
+            homeEventChannel.send(HomeEvent.UpdateTabSelected(curTab))
         }
     }
 
@@ -95,7 +101,14 @@ constructor(
     }
 
     fun onTaskLoad() = viewModelScope.launch {
-        var task : Task = taskDao.getTopScoreTask("").first()
+        var task: Task
+        if(curTab == 0) {
+            task = taskDao.getTopScoreTask("").first()
+        }
+        else
+        {
+            task = taskDao.getTopTermScoreTask("",curTab == 2).first()
+        }
         if(task != null)
         {
             curTask = task
@@ -107,9 +120,9 @@ constructor(
         }
     }
 
-    fun updateTab(position : Int)
-    {
+    fun updateTab(position : Int) = viewModelScope.launch {
         curTab = position
+        preferencesManager.updateHomeTab(curTab)
     }
 
     fun onTaskSelected(task: Task) = viewModelScope.launch {
@@ -150,4 +163,5 @@ sealed class HomeEvent {
     object ClearCurrentTaskInformation : HomeEvent()
     data class UndoAddSteps(val steps : Int) : HomeEvent()
     data class ShowInvalidInputMessage(val msg : String) : HomeEvent()
+    data class UpdateTabSelected(val tab : Int) : HomeEvent()
 }

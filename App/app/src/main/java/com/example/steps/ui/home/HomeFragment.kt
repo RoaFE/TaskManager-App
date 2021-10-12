@@ -165,6 +165,12 @@ class HomeFragment : Fragment(R.layout.fragment_home), HomeAdapter.OnItemClickLi
                             floatingActionButtonTaskConfirm.isVisible = false
                         }
                     }
+                    is HomeEvent.UpdateTabSelected ->
+                    {
+                        binding.apply {
+                            tabTaskTerms.selectTab(tabTaskTerms.getTabAt(event.tab))
+                        }
+                    }
                 }.exhaustive
 
             }

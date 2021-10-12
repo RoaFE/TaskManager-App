@@ -16,7 +16,7 @@ private const val TAG = "PreferencesManager"
 
 enum class SortOrder {BY_NAME, BY_DATE, BY_SCORE}
 
-data class UserPreferences(val sortOrder: SortOrder, val hideCompleted: Boolean, val curTaskId : Int)
+data class UserPreferences(val sortOrder: SortOrder, val hideCompleted: Boolean, val curTaskId : Int, val curHomeTab : Int)
 
 @Singleton
 class PreferencesManager @Inject constructor(@ApplicationContext context: Context) {
@@ -39,7 +39,8 @@ class PreferencesManager @Inject constructor(@ApplicationContext context: Contex
             )
             val hideCompleted = preferences[PreferencesKeys.HIDE_COMPLETED] ?: true
             val curTask = preferences[PreferencesKeys.CUR_TASK] ?: 1
-            UserPreferences(sortOrder, hideCompleted , curTask)
+            val curHomeTab = preferences[PreferencesKeys.CUR_HOME_TAB] ?: 0
+            UserPreferences(sortOrder, hideCompleted , curTask, curHomeTab)
         }
 
     suspend fun updateSortOrder(sortOrder: SortOrder) {
@@ -54,6 +55,12 @@ class PreferencesManager @Inject constructor(@ApplicationContext context: Contex
         }
     }
 
+    suspend fun updateHomeTab(id : Int) {
+        dataStore.edit { preferences ->
+            preferences[PreferencesKeys.CUR_HOME_TAB] = id
+        }
+    }
+
     suspend fun updateHideCompleted(hideCompleted : Boolean) {
         dataStore.edit { preferences ->
             preferences[PreferencesKeys.HIDE_COMPLETED] = hideCompleted
@@ -64,6 +71,7 @@ class PreferencesManager @Inject constructor(@ApplicationContext context: Contex
     private object PreferencesKeys {
         val SORT_ORDER = preferencesKey<String>("sort_order")
         val CUR_TASK = preferencesKey<Int>("cur_task")
+        val CUR_HOME_TAB = preferencesKey<Int>("cur_home_tab")
         val HIDE_COMPLETED = preferencesKey<Boolean>("hide_completed")
     }
 }
