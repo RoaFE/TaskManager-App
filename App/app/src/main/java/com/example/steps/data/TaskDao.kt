@@ -20,11 +20,11 @@ interface TaskDao {
             SortOrder.BY_SCORE -> getCompletedTasksSortedByScore(query)
         }
 
-    fun getTasksByTerm(query: String, sortOrder: SortOrder, term: Boolean) : Flow<List<Task>> =
+    fun getTasksByTerm(query: String, sortOrder: SortOrder, term: Boolean, hideCompleted: Boolean) : Flow<List<Task>> =
         when(sortOrder) {
-            SortOrder.BY_NAME -> getTermTasksSortedByName(query,term)
-            SortOrder.BY_DATE -> getTermTasksSortedByDateCreated(query,term)
-            SortOrder.BY_SCORE -> getTermTasksSortedByScore(query,term)
+            SortOrder.BY_NAME -> getTermTasksSortedByName(query,term, hideCompleted)
+            SortOrder.BY_DATE -> getTermTasksSortedByDateCreated(query,term, hideCompleted)
+            SortOrder.BY_SCORE -> getTermTasksSortedByScore(query,term, hideCompleted)
         }
 
     @Query("SELECT * FROM task_table WHERE id LIKE '%' || :searchQuery || '%'")
@@ -48,14 +48,14 @@ interface TaskDao {
     @Query("SELECT * FROM task_table WHERE completed = 1 AND name LIKE '%' || :searchQuery || '%' ORDER BY taskScore DESC")
     fun getCompletedTasksSortedByScore(searchQuery: String): Flow<List<Task>>
 
-    @Query("SELECT * FROM task_table WHERE longTerm = :term AND name LIKE '%' || :searchQuery || '%' ORDER BY name ASC")
-    fun getTermTasksSortedByName(searchQuery: String, term: Boolean): Flow<List<Task>>
+    @Query("SELECT * FROM task_table WHERE (completed != :hideCompleted OR completed = 0) AND longTerm = :term AND name LIKE '%' || :searchQuery || '%' ORDER BY name ASC")
+    fun getTermTasksSortedByName(searchQuery: String, term: Boolean, hideCompleted : Boolean): Flow<List<Task>>
 
-    @Query("SELECT * FROM task_table WHERE longTerm = :term AND name LIKE '%' || :searchQuery || '%' ORDER BY dateCreated DESC")
-    fun getTermTasksSortedByDateCreated(searchQuery: String, term: Boolean): Flow<List<Task>>
+    @Query("SELECT * FROM task_table WHERE (completed != :hideCompleted OR completed = 0) AND longTerm = :term AND name LIKE '%' || :searchQuery || '%' ORDER BY dateCreated DESC")
+    fun getTermTasksSortedByDateCreated(searchQuery: String, term: Boolean, hideCompleted : Boolean): Flow<List<Task>>
 
-    @Query("SELECT * FROM task_table WHERE longTerm = :term AND name LIKE '%' || :searchQuery || '%' ORDER BY taskScore DESC")
-    fun getTermTasksSortedByScore(searchQuery: String, term: Boolean): Flow<List<Task>>
+    @Query("SELECT * FROM task_table WHERE (completed != :hideCompleted OR completed = 0) AND longTerm = :term AND name LIKE '%' || :searchQuery || '%' ORDER BY taskScore DESC")
+    fun getTermTasksSortedByScore(searchQuery: String, term: Boolean, hideCompleted : Boolean): Flow<List<Task>>
 
     @Query("SELECT * FROM task_table WHERE name LIKE '%' || :searchQuery || '%' AND completed = 0 ORDER BY taskScore DESC LIMIT 1")
     fun getTopScoreTask(searchQuery: String): Flow<Task>

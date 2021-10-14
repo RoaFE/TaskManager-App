@@ -75,7 +75,7 @@ constructor(
 
         Pair(query,filterPreferences)
     }.flatMapLatest { (query, filterPreferences) ->
-        taskDao.getTasksByTerm(query,filterPreferences.sortOrder,false)
+        taskDao.getTasksByTerm(query,filterPreferences.sortOrder,false,filterPreferences.hideCompleted)
     }
 
     private val tasksLongTermFlow = combine(
@@ -85,7 +85,7 @@ constructor(
 
         Pair(query,filterPreferences)
     }.flatMapLatest { (query, filterPreferences) ->
-        taskDao.getTasksByTerm(query,filterPreferences.sortOrder,true)
+        taskDao.getTasksByTerm(query,filterPreferences.sortOrder,true,filterPreferences.hideCompleted)
     }
 
     fun onSortOrderSelected(sortOrder: SortOrder) = viewModelScope.launch {
