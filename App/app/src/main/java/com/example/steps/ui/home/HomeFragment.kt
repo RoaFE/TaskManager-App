@@ -169,6 +169,9 @@ class HomeFragment : Fragment(R.layout.fragment_home), HomeAdapter.OnItemClickLi
                     {
                         binding.apply {
                             tabTaskTerms.selectTab(tabTaskTerms.getTabAt(event.tab))
+                            recyclerViewHome.isVisible = viewModel.curTab == 0
+                            recyclerViewShortTerm.isVisible = viewModel.curTab == 1
+                            recyclerViewLongTerm.isVisible = viewModel.curTab == 2
                         }
                     }
                 }.exhaustive

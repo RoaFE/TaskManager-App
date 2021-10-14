@@ -33,17 +33,13 @@ constructor(
     init {
         viewModelScope.launch {
 
-            var task : Task = taskDao.getTopScoreTask("").first()
-            if(task != null)
-            {
-                curTask = task
-            }
-
             preferencesManager.preferencesFlow.collect { preferences ->
                 curTab = preferences.curHomeTab
             }
 
             homeEventChannel.send(HomeEvent.UpdateTabSelected(curTab))
+
+            onTaskLoad()
         }
     }
 
